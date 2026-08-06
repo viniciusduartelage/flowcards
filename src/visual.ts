@@ -35,6 +35,8 @@ import VisualUpdateOptions = powerbi.extensibility.visual.VisualUpdateOptions;
 import IVisual = powerbi.extensibility.visual.IVisual;
 import IVisualHost = powerbi.extensibility.visual.IVisualHost;
 import IVisualEventService = powerbi.extensibility.IVisualEventService;
+import ISelectionManager = powerbi.extensibility.ISelectionManager;
+import ISelectionId = powerbi.visuals.ISelectionId;
 import DataView = powerbi.DataView;
 
 import { VisualFormattingSettingsModel } from "./settings";
@@ -57,12 +59,30 @@ export class Visual implements IVisual {
     private formattingSettingsService: FormattingSettingsService;
     private formatoValor: string | undefined;
     private formatoValor2: string | undefined;
+    private selectionManager: ISelectionManager;
+    private ids: ISelectionId[] = [];
+
+    // Selecao com Ctrl/Cmd acumulando mais de um cartao. Vira opcao do painel
+    // de formatacao (this.settings.selecao.multipla.value) na Task 5; o
+    // grupo "selecao" ainda nao existe em settings.ts, entao por ora e uma
+    // constante fixa.
+    private readonly permiteMultipla = true;
 
     constructor(options: VisualConstructorOptions) {
         this.events = options.host.eventService;
         this.host = options.host;
         this.formattingSettingsService = new FormattingSettingsService();
         this.root = options.element;
+        this.selectionManager = options.host.createSelectionManager();
+
+        // Clicar fora de qualquer cartao limpa a selecao. Fica no elemento
+        // raiz (que sobrevive a cada update) e nao dentro de desenhar(), que
+        // recria a faixa a cada chamada; o clique no cartao chama
+        // stopPropagation para nao borbulhar ate aqui e desfazer a propria
+        // selecao que acabou de marcar.
+        this.root.addEventListener("click", () => {
+            this.selectionManager.clear().then(() => this.pintarSelecao());
+        });
     }
 
     public update(options: VisualUpdateOptions) {
@@ -76,6 +96,7 @@ export class Visual implements IVisual {
             this.formatoValor2 = this.formatoDoPapel(dataView, "valor2");
 
             const modelo = construirModelo(dataView);
+            this.ids = this.idsDeSelecao(dataView);
             this.desenhar(modelo);
 
             this.events.renderingFinished(options);
@@ -115,6 +136,7 @@ export class Visual implements IVisual {
             el.setAttribute("role", "button");
             el.setAttribute("tabindex", "0");
             el.setAttribute("aria-label", `${c.categoria}: ${this.fmt(c.valor, this.formatoValor)}`);
+            el.setAttribute("aria-pressed", "false");
 
             el.appendChild(this.span("lbl", c.categoria));
             el.appendChild(this.span("val", this.fmt(c.valor, this.formatoValor)));
@@ -125,9 +147,51 @@ export class Visual implements IVisual {
                 if (c.valor2 !== null) { el.appendChild(this.span("v2", this.fmt(c.valor2, this.formatoValor2))); }
             }
             if (c.rodape) { el.appendChild(this.span("foot", c.rodape)); }
+
+            const acionar = (multi: boolean) => {
+                this.selectionManager.select(this.ids[c.indice], multi).then(() => this.pintarSelecao());
+            };
+            el.addEventListener("click", (ev: MouseEvent) => {
+                // Sem isto o clique sobe ate a raiz e o ouvinte de "clicar fora"
+                // (constructor) limpa a selecao que acabou de ser feita aqui.
+                ev.stopPropagation();
+                acionar(this.permiteMultipla && (ev.ctrlKey || ev.metaKey));
+            });
+            el.addEventListener("keydown", (ev: KeyboardEvent) => {
+                if (ev.key === "Enter" || ev.key === " ") {
+                    ev.preventDefault();
+                    acionar(this.permiteMultipla && (ev.ctrlKey || ev.metaKey));
+                }
+            });
+
             faixa.appendChild(el);
         }
         this.root.appendChild(faixa);
+        this.pintarSelecao();
+    }
+
+    /** Monta o selectionId de cada categoria, na mesma ordem/indice dos cartoes. */
+    private idsDeSelecao(dataView: DataView): ISelectionId[] {
+        const cat = dataView?.categorical?.categories?.[0];
+        if (!cat) { return []; }
+        return cat.values.map((_, i) =>
+            this.host.createSelectionIdBuilder().withCategory(cat, i).createSelectionId());
+    }
+
+    /** Reflete a selecao atual nos cartoes: aceso/apagado, e aria-pressed para leitor de tela. */
+    private pintarSelecao(): void {
+        // getSelectionIds() devolve powerbi.extensibility.ISelectionId, uma interface
+        // vazia sem "equals" nesta versao do pacote de tipos. O objeto em tempo de
+        // execucao e o mesmo criado por createSelectionIdBuilder() (powerbi.visuals.ISelectionId,
+        // que tem "equals"); o cast so corrige o tipo declarado.
+        const sel = this.selectionManager.getSelectionIds() as unknown as ISelectionId[];
+        const temSelecao = sel.length > 0;
+        this.root.querySelectorAll<HTMLElement>(".card").forEach((el, i) => {
+            const escolhido = temSelecao && sel.some(s => s.equals(this.ids[i]));
+            el.classList.toggle("aceso", escolhido);
+            el.classList.toggle("apagado", temSelecao && !escolhido);
+            el.setAttribute("aria-pressed", String(escolhido));
+        });
     }
 
     private span(cls: string, texto: string): HTMLElement {

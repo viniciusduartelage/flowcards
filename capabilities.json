@@ -1,79 +1,23 @@
 {
-    "dataRoles": [
-        {
-            "displayName": "Category Data",
-            "name": "category",
-            "kind": "Grouping"
-        },
-        {
-            "displayName": "Measure Data",
-            "name": "measure",
-            "kind": "Measure"
-        }
-    ],
-    "objects": {
-        "dataPoint": {
-            "properties": {
-                "defaultColor": {
-                    "type": {
-                        "fill": {
-                            "solid": {
-                                "color": true
-                            }
-                        }
-                    }
-                },
-                "showAllDataPoints": {
-                    "type": {
-                        "bool": true
-                    }
-                },
-                "fill": {
-                    "type": {
-                        "fill": {
-                            "solid": {
-                                "color": true
-                            }
-                        }
-                    }
-                },
-                "fillRule": {
-                    "type": {
-                        "fill": {}
-                    }
-                },
-                 "fontSize": {
-                    "type": {
-                        "formatting": {
-                            "fontSize": true
-                        }
-                    }
-                }
-            }
-        }
-    },
-    "dataViewMappings": [
-        {
-            "categorical": {
-                "categories": {
-                    "for": {
-                        "in": "category"
-                    },
-                    "dataReductionAlgorithm": {
-                        "top": {}
-                    }
-                },
-                "values": {
-                    "select": [
-                        {
-                            "bind": {
-                                "to": "measure"
-                            }
-                        }
-                    ]
-                }
-            }
-        }
-    ],
-    "privileges": []
+  "dataRoles": [
+    { "displayName": "Categoria",       "displayNameKey": "Role_Categoria", "name": "categoria", "kind": "Grouping" },
+    { "displayName": "Valor",           "displayNameKey": "Role_Valor",     "name": "valor",     "kind": "Measure" },
+    { "displayName": "Valor 2",         "displayNameKey": "Role_Valor2",    "name": "valor2",    "kind": "Measure" },
+    { "displayName": "Rotulo do Valor 2","displayNameKey": "Role_Rotulo2",  "name": "rotulo2",   "kind": "Measure" },
+    { "displayName": "Rodape",          "displayNameKey": "Role_Rodape",    "name": "rodape",    "kind": "Measure" },
+    { "displayName": "Cor",             "displayNameKey": "Role_Cor",       "name": "cor",       "kind": "Measure" }
+  ],
+  "dataViewMappings": [{
+    "conditions": [{ "categoria": { "max": 1 }, "valor": { "max": 1 }, "valor2": { "max": 1 },
+                     "rotulo2": { "max": 1 }, "rodape": { "max": 1 }, "cor": { "max": 1 } }],
+    "categorical": {
+      "categories": { "for": { "in": "categoria" }, "dataReductionAlgorithm": { "top": { "count": 30 } } },
+      "values": { "select": [ { "bind": { "to": "valor" } }, { "bind": { "to": "valor2" } },
+                              { "bind": { "to": "rotulo2" } }, { "bind": { "to": "rodape" } },
+                              { "bind": { "to": "cor" } } ] }
+    }
+  }],
+  "supportsHighlight": false,
+  "supportsKeyboardFocus": true,
+  "privileges": []
 }

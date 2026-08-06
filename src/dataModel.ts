@@ -32,10 +32,7 @@ function txt(v: unknown): string {
     return v === null || v === undefined ? "" : String(v);
 }
 
-export function construirModelo(
-    dataView: powerbi.DataView,
-    corDe: (indice: number, categoria: string) => string
-): Modelo {
+export function construirModelo(dataView: powerbi.DataView): Modelo {
     const cat = dataView?.categorical?.categories?.[0];
     if (!cat || !cat.values) { return { cards: [], temValor2: false }; }
 

@@ -1,9 +1,29 @@
-p {
-    font-size: 20px;
-    font-weight: bold;
-    em {
-        background: yellow;
-        padding: 5px;
-        
-    }
+.flowcards {
+  display: flex; gap: var(--fc-gap, 9px);
+  width: 100%; height: 100%;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  overflow: hidden;
 }
+.flowcards .card {
+  flex: 1 1 0; min-width: 0;
+  border-radius: var(--fc-radius, 10px);
+  padding: 13px 14px; color: #fff;
+  border: 2px solid transparent;
+  display: flex; flex-direction: column;
+  cursor: pointer; user-select: none;
+  transition: opacity .18s ease, box-shadow .18s ease;
+}
+.flowcards .card:focus-visible { outline: 3px solid #FFD98A; outline-offset: 2px; }
+.flowcards .card.apagado { opacity: var(--fc-dim, .38); }
+.flowcards .card.aceso   { border-color: #FFD98A; box-shadow: 0 0 0 3px rgba(255,217,138,.32); }
+.flowcards .lbl  { font-size: 9.5px; font-weight: 700; letter-spacing: .08em;
+                   text-transform: uppercase; color: rgba(255,255,255,.64);
+                   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.flowcards .val  { font-size: var(--fc-val, 26px); font-weight: 700; line-height: 1.04;
+                   margin: 4px 0 7px; font-variant-numeric: tabular-nums; }
+.flowcards .k    { font-size: 8.5px; font-weight: 700; letter-spacing: .06em;
+                   text-transform: uppercase; color: rgba(255,255,255,.52); }
+.flowcards .v2   { font-size: 13.5px; font-weight: 600; color: rgba(255,255,255,.88);
+                   font-variant-numeric: tabular-nums; }
+.flowcards .foot { font-size: 10px; color: rgba(255,255,255,.42); margin-top: auto; padding-top: 6px; }
+@media (prefers-reduced-motion: reduce) { .flowcards .card { transition: none; } }

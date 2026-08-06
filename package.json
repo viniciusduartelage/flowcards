@@ -1,0 +1,30 @@
+{
+  "name": "flowcards",
+  "description": "Card strip custom visual for Power BI: one card per category, in model order, click to filter the page.",
+  "version": "1.0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/viniciusduartelage/flowcards.git"
+  },
+  "license": "GPL-3.0-or-later",
+  "scripts": {
+    "pbiviz": "pbiviz",
+    "start": "pbiviz start",
+    "package": "pbiviz package",
+    "lint": "npx eslint .",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@types/d3": "7.4.3",
+    "d3": "7.9.0",
+    "powerbi-visuals-api": "5.11.0",
+    "powerbi-visuals-utils-formattingmodel": "6.0.4"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.66.0",
+    "eslint": "^9.39.5",
+    "eslint-plugin-powerbi-visuals": "^1.1.1",
+    "typescript": "^5.5.4",
+    "vitest": "^4.1.10"
+  }
+}

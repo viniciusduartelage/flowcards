@@ -1,0 +1,8 @@
+node_modules/
+.tmp/
+dist/
+*.log
+.vscode/
+.superpowers/
+webpack.statistics.*.html
+Thumbs.db

@@ -1,0 +1,21 @@
+{
+  "visual": {
+    "name": "flowCards",
+    "displayName": "FlowCards",
+    "guid": "flowCards6EE9839E03098FD222C0A67CF7F74F85",
+    "visualClassName": "Visual",
+    "version": "1.0.0.0",
+    "description": "Uma faixa de cartoes, um por categoria, na ordem do modelo. Clicar filtra a pagina.",
+    "supportUrl": "https://github.com/viniciusduartelage/flowcards/issues",
+    "gitHubUrl": "https://github.com/viniciusduartelage/flowcards"
+  },
+  "apiVersion": "5.11.0",
+  "author": { "name": "Vinicius Duarte", "email": "viniciusduartelage@outlook.com" },
+  "assets": { "icon": "assets/icon.png" },
+  "externalJS": null,
+  "style": "style/visual.less",
+  "capabilities": "capabilities.json",
+  "dependencies": null,
+  "stringResources": [],
+  "version": "1.0.0.0"
+}

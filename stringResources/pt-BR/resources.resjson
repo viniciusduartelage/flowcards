@@ -1,0 +1,42 @@
+{
+  "Role_Categoria": "Categoria",
+  "Role_Valor": "Valor",
+  "Role_Valor2": "Segundo valor",
+  "Role_Rotulo2": "Rótulo do segundo valor",
+  "Role_Rodape": "Rodapé",
+  "Role_Cor": "Cor",
+
+  "Obj_Cartoes": "Cartões",
+  "Obj_Categoria": "Cores por categoria",
+  "Obj_Titulo": "Título",
+  "Obj_Valor": "Valor",
+  "Obj_Rotulo2": "Rótulo do segundo valor",
+  "Obj_Valor2": "Segundo valor",
+  "Obj_Rodape": "Rodapé",
+  "Obj_Selecao": "Seleção",
+
+  "Common_Color": "Cor",
+  "Common_Show": "Mostrar",
+
+  "Font_Family": "Fonte",
+  "Font_Size": "Tamanho",
+  "Font_Bold": "Negrito",
+  "Font_Italic": "Itálico",
+
+  "Prop_LarguraMaxima": "Largura máxima (px, 0 = sem limite)",
+  "Prop_AlturaMinima": "Altura mínima (px)",
+  "Prop_Raio": "Raio do canto (px)",
+  "Prop_Espaco": "Espaço entre cartões (px)",
+  "Prop_Preenchimento": "Preenchimento interno (px)",
+
+  "Prop_Maiusculas": "MAIÚSCULAS",
+  "Prop_Espacamento": "Espaçamento entre letras (px)",
+
+  "Prop_Decimais": "Casas decimais (-1 = automático)",
+  "Prop_Abreviar": "Abreviar números grandes",
+
+  "Prop_Multipla": "Permitir múltipla",
+  "Prop_Opacidade": "Opacidade dos apagados (%)",
+  "Prop_CorBorda": "Cor da borda de destaque",
+  "Prop_Espessura": "Espessura da borda (px)"
+}

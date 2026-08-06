@@ -62,12 +62,6 @@ export class Visual implements IVisual {
     private selectionManager: ISelectionManager;
     private ids: ISelectionId[] = [];
 
-    // Selecao com Ctrl/Cmd acumulando mais de um cartao. Vira opcao do painel
-    // de formatacao (this.settings.selecao.multipla.value) na Task 5; o
-    // grupo "selecao" ainda nao existe em settings.ts, entao por ora e uma
-    // constante fixa.
-    private readonly permiteMultipla = true;
-
     constructor(options: VisualConstructorOptions) {
         this.events = options.host.eventService;
         this.host = options.host;
@@ -97,7 +91,21 @@ export class Visual implements IVisual {
 
             const modelo = construirModelo(dataView);
             this.ids = this.idsDeSelecao(dataView);
-            this.desenhar(modelo);
+
+            // Cor de fundo por categoria (dinamica): a cor mostrada/gravada em
+            // cada ColorPicker do card "categoria" e a mesma cor usada para
+            // pintar o cartao, lida de volta do dataView (objects[i]) quando o
+            // usuario ja configurou, ou a cor padrao da paleta quando ainda nao.
+            const cat = dataView && dataView.categorical && dataView.categorical.categories && dataView.categorical.categories[0];
+            const coresCategoria = modelo.cards.map((c) => this.corCategoria(cat, c.indice, this.corDe(c.indice)));
+            this.formattingSettings.populateColorSelector(modelo.cards.map((c) => ({
+                nome: c.categoria,
+                cor: coresCategoria[c.indice],
+                selector: this.ids[c.indice] ? this.ids[c.indice].getSelector() : undefined
+            })));
+
+            this.aplicarVariaveis(this.formattingSettings);
+            this.desenhar(modelo, coresCategoria);
 
             this.events.renderingFinished(options);
         }
@@ -125,28 +133,32 @@ export class Visual implements IVisual {
         return undefined;
     }
 
-    private desenhar(m: Modelo): void {
+    private desenhar(m: Modelo, coresCategoria: string[]): void {
         this.root.replaceChildren();
         const faixa = document.createElement("div");
         faixa.className = "flowcards";
+        const s = this.formattingSettings;
         for (const c of m.cards) {
             const el = document.createElement("div");
             el.className = "card";
-            el.style.background = c.cor ?? this.corDe(c.indice);
+            // Precedencia: cor vinda da medida "Cor" > cor configurada por
+            // categoria no painel > cor padrao da paleta por posicao.
+            el.style.background = c.cor ?? coresCategoria[c.indice];
             el.setAttribute("role", "button");
             el.setAttribute("tabindex", "0");
-            el.setAttribute("aria-label", `${c.categoria}: ${this.fmt(c.valor, this.formatoValor)}`);
+            el.setAttribute("aria-label", `${c.categoria}: ${this.fmtValor(c.valor)}`);
             el.setAttribute("aria-pressed", "false");
 
-            el.appendChild(this.span("lbl", c.categoria));
-            el.appendChild(this.span("val", this.fmt(c.valor, this.formatoValor)));
+            const titulo = s.titulo.maiusculas.value ? c.categoria.toUpperCase() : c.categoria;
+            el.appendChild(this.span("lbl", titulo));
+            el.appendChild(this.span("val", this.fmtValor(c.valor)));
             if (m.temValor2) {
                 if (c.rotulo2) { el.appendChild(this.span("k", c.rotulo2)); }
                 // valor 2 nulo: o rotulo fica, o numero some. Traco ou zero dariam a
                 // impressao de valor nulo em vez de inexistente.
-                if (c.valor2 !== null) { el.appendChild(this.span("v2", this.fmt(c.valor2, this.formatoValor2))); }
+                if (c.valor2 !== null) { el.appendChild(this.span("v2", this.fmtValor2(c.valor2))); }
             }
-            if (c.rodape) { el.appendChild(this.span("foot", c.rodape)); }
+            if (s.rodape.mostrar.value && c.rodape) { el.appendChild(this.span("foot", c.rodape)); }
 
             const acionar = (multi: boolean) => {
                 this.selectionManager.select(this.ids[c.indice], multi).then(() => this.pintarSelecao());
@@ -155,12 +167,12 @@ export class Visual implements IVisual {
                 // Sem isto o clique sobe ate a raiz e o ouvinte de "clicar fora"
                 // (constructor) limpa a selecao que acabou de ser feita aqui.
                 ev.stopPropagation();
-                acionar(this.permiteMultipla && (ev.ctrlKey || ev.metaKey));
+                acionar(s.selecao.multipla.value && (ev.ctrlKey || ev.metaKey));
             });
             el.addEventListener("keydown", (ev: KeyboardEvent) => {
                 if (ev.key === "Enter" || ev.key === " ") {
                     ev.preventDefault();
-                    acionar(this.permiteMultipla && (ev.ctrlKey || ev.metaKey));
+                    acionar(s.selecao.multipla.value && (ev.ctrlKey || ev.metaKey));
                 }
             });
 
@@ -201,11 +213,37 @@ export class Visual implements IVisual {
         return e;
     }
 
-    /** Numero cru vira texto no formato da medida (milhar, moeda, abreviacao). */
-    private fmt(valor: number | null, formato: string | undefined): string {
+    /**
+     * Numero cru do Valor principal vira texto, respeitando as opcoes do
+     * painel: casas decimais (-1 = automatico, deixa o formato da medida
+     * decidir) e abreviar (liga a escala K/M/B do valueFormatter passando o
+     * valor real como referencia de magnitude).
+     */
+    private fmtValor(valor: number | null): string {
+        if (valor === null) { return ""; }
+        const cfg = this.formattingSettings.valor;
+        const abreviar = cfg.abreviar.value;
+        const casas = cfg.decimais.value;
+        return valueFormatter.create({
+            format: this.formatoValor,
+            value: abreviar ? valor : undefined,
+            precision: casas >= 0 ? casas : undefined,
+            formatSingleValues: true,
+            allowFormatBeautification: abreviar,
+            cultureSelector: this.host.locale
+        }).format(valor);
+    }
+
+    /**
+     * Numero cru do Valor 2 vira texto. Sem opcao propria de casas
+     * decimais/abreviacao no painel (o grupo "Valor 2" so tem fonte e cor),
+     * entao mantem o comportamento ja aprovado na tela: uma casa decimal e
+     * abreviacao sempre ligada.
+     */
+    private fmtValor2(valor: number | null): string {
         if (valor === null) { return ""; }
         return valueFormatter.create({
-            format: formato,
+            format: this.formatoValor2,
             value: valor,
             precision: 1,
             formatSingleValues: true,
@@ -217,5 +255,76 @@ export class Visual implements IVisual {
     /** Cor padrao por posicao do cartao, usada so quando a coluna Cor nao veio preenchida. */
     private corDe(indice: number): string {
         return PALETA_PADRAO[indice % PALETA_PADRAO.length];
+    }
+
+    /**
+     * Cor configurada pelo usuario para uma categoria especifica, lida de
+     * volta do dataView (a mesma mecanica do card "Data colors" dos visuais
+     * nativos: o Power BI grava a escolha em cat.objects[indice], escopada
+     * pelo selector daquela categoria). Sem configuracao, devolve o padrao.
+     */
+    private corCategoria(cat: powerbi.DataViewCategoryColumn | undefined, indice: number, padrao: string): string {
+        const objs = cat && cat.objects && cat.objects[indice];
+        const fill = objs && (objs["categoria"] as powerbi.DataViewObject | undefined);
+        const cor = fill && (fill["cor"] as powerbi.Fill | undefined);
+        return (cor && cor.solid && cor.solid.color) || padrao;
+    }
+
+    /** Converte hex (#RRGGBB ou #RGB) em rgba(...) com a transparencia pedida. */
+    private rgba(hex: string, alpha: number): string {
+        const h = (hex || "#000000").replace("#", "");
+        const full = h.length === 3 ? h.split("").map(ch => ch + ch).join("") : h;
+        const r = parseInt(full.substring(0, 2), 16) || 0;
+        const g = parseInt(full.substring(2, 4), 16) || 0;
+        const b = parseInt(full.substring(4, 6), 16) || 0;
+        return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    }
+
+    /** Escreve cada opcao do painel de formatacao como variavel CSS no elemento raiz. */
+    private aplicarVariaveis(s: VisualFormattingSettingsModel): void {
+        const st = this.root.style;
+
+        st.setProperty("--fc-gap", `${s.cartoes.espaco.value}px`);
+        st.setProperty("--fc-radius", `${s.cartoes.raio.value}px`);
+        st.setProperty("--fc-pad", `${s.cartoes.preenchimento.value}px`);
+        st.setProperty("--fc-max-width", s.cartoes.larguraMaxima.value > 0 ? `${s.cartoes.larguraMaxima.value}px` : "none");
+        st.setProperty("--fc-min-height", s.cartoes.alturaMinima.value > 0 ? `${s.cartoes.alturaMinima.value}px` : "0");
+
+        const opacidade = Math.max(0, Math.min(100, s.selecao.opacidade.value));
+        st.setProperty("--fc-dim", String(opacidade / 100));
+        st.setProperty("--fc-accent", s.selecao.corBorda.value.value);
+        st.setProperty("--fc-accent-shadow", this.rgba(s.selecao.corBorda.value.value, 0.32));
+        st.setProperty("--fc-accent-width", `${s.selecao.espessura.value}px`);
+
+        st.setProperty("--fc-lbl-family", s.titulo.font.fontFamily.value);
+        st.setProperty("--fc-lbl-size", `${s.titulo.font.fontSize.value}px`);
+        st.setProperty("--fc-lbl-weight", s.titulo.font.bold.value ? "700" : "400");
+        st.setProperty("--fc-lbl-style", s.titulo.font.italic.value ? "italic" : "normal");
+        st.setProperty("--fc-lbl-color", s.titulo.cor.value.value);
+        st.setProperty("--fc-lbl-spacing", `${s.titulo.espacamento.value}px`);
+
+        st.setProperty("--fc-val-family", s.valor.font.fontFamily.value);
+        st.setProperty("--fc-val-size", `${s.valor.font.fontSize.value}px`);
+        st.setProperty("--fc-val-weight", s.valor.font.bold.value ? "700" : "400");
+        st.setProperty("--fc-val-style", s.valor.font.italic.value ? "italic" : "normal");
+        st.setProperty("--fc-val-color", s.valor.cor.value.value);
+
+        st.setProperty("--fc-k-family", s.rotulo2.font.fontFamily.value);
+        st.setProperty("--fc-k-size", `${s.rotulo2.font.fontSize.value}px`);
+        st.setProperty("--fc-k-weight", s.rotulo2.font.bold.value ? "700" : "400");
+        st.setProperty("--fc-k-style", s.rotulo2.font.italic.value ? "italic" : "normal");
+        st.setProperty("--fc-k-color", s.rotulo2.cor.value.value);
+
+        st.setProperty("--fc-v2-family", s.valor2.font.fontFamily.value);
+        st.setProperty("--fc-v2-size", `${s.valor2.font.fontSize.value}px`);
+        st.setProperty("--fc-v2-weight", s.valor2.font.bold.value ? "700" : "400");
+        st.setProperty("--fc-v2-style", s.valor2.font.italic.value ? "italic" : "normal");
+        st.setProperty("--fc-v2-color", s.valor2.cor.value.value);
+
+        st.setProperty("--fc-foot-family", s.rodape.font.fontFamily.value);
+        st.setProperty("--fc-foot-size", `${s.rodape.font.fontSize.value}px`);
+        st.setProperty("--fc-foot-weight", s.rodape.font.bold.value ? "700" : "400");
+        st.setProperty("--fc-foot-style", s.rodape.font.italic.value ? "italic" : "normal");
+        st.setProperty("--fc-foot-color", s.rodape.cor.value.value);
     }
 }

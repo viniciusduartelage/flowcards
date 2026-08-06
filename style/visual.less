@@ -6,8 +6,10 @@
 }
 .flowcards .card {
   flex: 1 1 0; min-width: 0;
+  max-width: var(--fc-max-width, none);
+  min-height: var(--fc-min-height, 0);
   border-radius: var(--fc-radius, 10px);
-  padding: 13px 14px; color: #fff;
+  padding: var(--fc-pad, 13px); color: #fff;
   border: 2px solid transparent;
   display: flex; flex-direction: column;
   cursor: pointer; user-select: none;
@@ -15,15 +17,50 @@
 }
 .flowcards .card:focus-visible { outline: 3px solid #FFD98A; outline-offset: 2px; }
 .flowcards .card.apagado { opacity: var(--fc-dim, .38); }
-.flowcards .card.aceso   { border-color: #FFD98A; box-shadow: 0 0 0 3px rgba(255,217,138,.32); }
-.flowcards .lbl  { font-size: 9.5px; font-weight: 700; letter-spacing: .08em;
-                   text-transform: uppercase; color: rgba(255,255,255,.64);
-                   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.flowcards .val  { font-size: var(--fc-val, 26px); font-weight: 700; line-height: 1.04;
-                   margin: 4px 0 7px; font-variant-numeric: tabular-nums; }
-.flowcards .k    { font-size: 8.5px; font-weight: 700; letter-spacing: .06em;
-                   text-transform: uppercase; color: rgba(255,255,255,.52); }
-.flowcards .v2   { font-size: 13.5px; font-weight: 600; color: rgba(255,255,255,.88);
-                   font-variant-numeric: tabular-nums; }
-.flowcards .foot { font-size: 10px; color: rgba(255,255,255,.42); margin-top: auto; padding-top: 6px; }
+.flowcards .card.aceso {
+  border-color: var(--fc-accent, #FFD98A);
+  border-width: var(--fc-accent-width, 2px);
+  box-shadow: 0 0 0 3px var(--fc-accent-shadow, rgba(255,217,138,.32));
+}
+.flowcards .lbl {
+  font-family: var(--fc-lbl-family, "Segoe UI");
+  font-size: var(--fc-lbl-size, 9.5px);
+  font-weight: var(--fc-lbl-weight, 700);
+  font-style: var(--fc-lbl-style, normal);
+  letter-spacing: var(--fc-lbl-spacing, .76px);
+  color: var(--fc-lbl-color, rgba(255,255,255,.64));
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.flowcards .val {
+  font-family: var(--fc-val-family, "Segoe UI");
+  font-size: var(--fc-val-size, 26px);
+  font-weight: var(--fc-val-weight, 700);
+  font-style: var(--fc-val-style, normal);
+  color: var(--fc-val-color, #fff);
+  line-height: 1.04; margin: 4px 0 7px; font-variant-numeric: tabular-nums;
+}
+.flowcards .k {
+  font-family: var(--fc-k-family, "Segoe UI");
+  font-size: var(--fc-k-size, 8.5px);
+  font-weight: var(--fc-k-weight, 700);
+  font-style: var(--fc-k-style, normal);
+  letter-spacing: .06em; text-transform: uppercase;
+  color: var(--fc-k-color, rgba(255,255,255,.52));
+}
+.flowcards .v2 {
+  font-family: var(--fc-v2-family, "Segoe UI");
+  font-size: var(--fc-v2-size, 13.5px);
+  font-weight: var(--fc-v2-weight, 600);
+  font-style: var(--fc-v2-style, normal);
+  color: var(--fc-v2-color, rgba(255,255,255,.88));
+  font-variant-numeric: tabular-nums;
+}
+.flowcards .foot {
+  font-family: var(--fc-foot-family, "Segoe UI");
+  font-size: var(--fc-foot-size, 10px);
+  font-weight: var(--fc-foot-weight, 400);
+  font-style: var(--fc-foot-style, normal);
+  color: var(--fc-foot-color, rgba(255,255,255,.42));
+  margin-top: auto; padding-top: 6px;
+}
 @media (prefers-reduced-motion: reduce) { .flowcards .card { transition: none; } }

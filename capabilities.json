@@ -17,6 +17,80 @@
                               { "bind": { "to": "cor" } } ] }
     }
   }],
+  "objects": {
+    "cartoes": {
+      "properties": {
+        "larguraMaxima":  { "type": { "numeric": true } },
+        "alturaMinima":   { "type": { "numeric": true } },
+        "raio":           { "type": { "numeric": true } },
+        "espaco":         { "type": { "numeric": true } },
+        "preenchimento":  { "type": { "numeric": true } }
+      }
+    },
+    "categoria": {
+      "properties": {
+        "cor": { "type": { "fill": { "solid": { "color": true } } } }
+      }
+    },
+    "titulo": {
+      "properties": {
+        "fontFamily":  { "type": { "formatting": { "fontFamily": true } } },
+        "fontSize":    { "type": { "formatting": { "fontSize": true } } },
+        "bold":        { "type": { "bool": true } },
+        "italic":      { "type": { "bool": true } },
+        "cor":         { "type": { "fill": { "solid": { "color": true } } } },
+        "maiusculas":  { "type": { "bool": true } },
+        "espacamento": { "type": { "numeric": true } }
+      }
+    },
+    "valor": {
+      "properties": {
+        "fontFamily": { "type": { "formatting": { "fontFamily": true } } },
+        "fontSize":   { "type": { "formatting": { "fontSize": true } } },
+        "bold":       { "type": { "bool": true } },
+        "italic":     { "type": { "bool": true } },
+        "cor":        { "type": { "fill": { "solid": { "color": true } } } },
+        "decimais":   { "type": { "numeric": true } },
+        "abreviar":   { "type": { "bool": true } }
+      }
+    },
+    "rotulo2": {
+      "properties": {
+        "fontFamily": { "type": { "formatting": { "fontFamily": true } } },
+        "fontSize":   { "type": { "formatting": { "fontSize": true } } },
+        "bold":       { "type": { "bool": true } },
+        "italic":     { "type": { "bool": true } },
+        "cor":        { "type": { "fill": { "solid": { "color": true } } } }
+      }
+    },
+    "valor2": {
+      "properties": {
+        "fontFamily": { "type": { "formatting": { "fontFamily": true } } },
+        "fontSize":   { "type": { "formatting": { "fontSize": true } } },
+        "bold":       { "type": { "bool": true } },
+        "italic":     { "type": { "bool": true } },
+        "cor":        { "type": { "fill": { "solid": { "color": true } } } }
+      }
+    },
+    "rodape": {
+      "properties": {
+        "mostrar":    { "type": { "bool": true } },
+        "fontFamily": { "type": { "formatting": { "fontFamily": true } } },
+        "fontSize":   { "type": { "formatting": { "fontSize": true } } },
+        "bold":       { "type": { "bool": true } },
+        "italic":     { "type": { "bool": true } },
+        "cor":        { "type": { "fill": { "solid": { "color": true } } } }
+      }
+    },
+    "selecao": {
+      "properties": {
+        "multipla":   { "type": { "bool": true } },
+        "opacidade":  { "type": { "numeric": true } },
+        "corBorda":   { "type": { "fill": { "solid": { "color": true } } } },
+        "espessura":  { "type": { "numeric": true } }
+      }
+    }
+  },
   "supportsHighlight": false,
   "supportsKeyboardFocus": true,
   "privileges": []

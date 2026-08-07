@@ -113,10 +113,15 @@ class Rotulo2Card extends SimpleCard {
 class Valor2Card extends SimpleCard {
     font = makeFont(13.5, true);
     cor = new formattingSettings.ColorPicker({ name: "cor", displayName: "Color", displayNameKey: "Common_Color", value: { value: "rgba(255,255,255,0.88)" } });
+    // Mesmas opcoes do Valor, porem o padrao aqui NAO abrevia: numero abreviado
+    // serve para comparar magnitude, e o valor secundario costuma ser o que a
+    // pessoa vai perseguir numa lista, onde "R$ 386.843" vale mais que "R$ 0,4M".
+    decimais = new formattingSettings.NumUpDown({ name: "decimais", displayName: "Decimal places (-1 = auto)", displayNameKey: "Prop_Decimais", value: 0 });
+    abreviar = new formattingSettings.ToggleSwitch({ name: "abreviar", displayName: "Abbreviate large numbers", displayNameKey: "Prop_Abreviar", value: false });
     name: string = "valor2";
     displayName: string = "Second value";
     displayNameKey: string = "Obj_Valor2";
-    slices: FormattingSettingsSlice[] = [this.font, this.cor];
+    slices: FormattingSettingsSlice[] = [this.font, this.cor, this.decimais, this.abreviar];
 }
 
 // ---------------------------------------------------------------------------

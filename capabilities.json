@@ -1,93 +1,398 @@
 {
   "dataRoles": [
-    { "displayName": "Categoria",       "displayNameKey": "Role_Categoria", "name": "categoria", "kind": "Grouping" },
-    { "displayName": "Valor",           "displayNameKey": "Role_Valor",     "name": "valor",     "kind": "Measure" },
-    { "displayName": "Valor 2",         "displayNameKey": "Role_Valor2",    "name": "valor2",    "kind": "Measure" },
-    { "displayName": "Rotulo do Valor 2","displayNameKey": "Role_Rotulo2",  "name": "rotulo2",   "kind": "Measure" },
-    { "displayName": "Rodape",          "displayNameKey": "Role_Rodape",    "name": "rodape",    "kind": "Measure" },
-    { "displayName": "Cor",             "displayNameKey": "Role_Cor",       "name": "cor",       "kind": "Measure" }
-  ],
-  "dataViewMappings": [{
-    "conditions": [{ "categoria": { "max": 1 }, "valor": { "max": 1 }, "valor2": { "max": 1 },
-                     "rotulo2": { "max": 1 }, "rodape": { "max": 1 }, "cor": { "max": 1 } }],
-    "categorical": {
-      "categories": { "for": { "in": "categoria" }, "dataReductionAlgorithm": { "top": { "count": 30 } } },
-      "values": { "select": [ { "bind": { "to": "valor" } }, { "bind": { "to": "valor2" } },
-                              { "bind": { "to": "rotulo2" } }, { "bind": { "to": "rodape" } },
-                              { "bind": { "to": "cor" } } ] }
+    {
+      "displayName": "Categoria",
+      "displayNameKey": "Role_Categoria",
+      "name": "categoria",
+      "kind": "Grouping"
+    },
+    {
+      "displayName": "Valor",
+      "displayNameKey": "Role_Valor",
+      "name": "valor",
+      "kind": "Measure"
+    },
+    {
+      "displayName": "Valor 2",
+      "displayNameKey": "Role_Valor2",
+      "name": "valor2",
+      "kind": "Measure"
+    },
+    {
+      "displayName": "Rotulo do Valor 2",
+      "displayNameKey": "Role_Rotulo2",
+      "name": "rotulo2",
+      "kind": "Measure"
+    },
+    {
+      "displayName": "Rodape",
+      "displayNameKey": "Role_Rodape",
+      "name": "rodape",
+      "kind": "Measure"
+    },
+    {
+      "displayName": "Cor",
+      "displayNameKey": "Role_Cor",
+      "name": "cor",
+      "kind": "Measure"
     }
-  }],
+  ],
+  "dataViewMappings": [
+    {
+      "conditions": [
+        {
+          "categoria": {
+            "max": 1
+          },
+          "valor": {
+            "max": 1
+          },
+          "valor2": {
+            "max": 1
+          },
+          "rotulo2": {
+            "max": 1
+          },
+          "rodape": {
+            "max": 1
+          },
+          "cor": {
+            "max": 1
+          }
+        }
+      ],
+      "categorical": {
+        "categories": {
+          "for": {
+            "in": "categoria"
+          },
+          "dataReductionAlgorithm": {
+            "top": {
+              "count": 30
+            }
+          }
+        },
+        "values": {
+          "select": [
+            {
+              "bind": {
+                "to": "valor"
+              }
+            },
+            {
+              "bind": {
+                "to": "valor2"
+              }
+            },
+            {
+              "bind": {
+                "to": "rotulo2"
+              }
+            },
+            {
+              "bind": {
+                "to": "rodape"
+              }
+            },
+            {
+              "bind": {
+                "to": "cor"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "objects": {
     "cartoes": {
       "properties": {
-        "larguraMaxima":  { "type": { "numeric": true } },
-        "alturaMinima":   { "type": { "numeric": true } },
-        "raio":           { "type": { "numeric": true } },
-        "espaco":         { "type": { "numeric": true } },
-        "preenchimento":  { "type": { "numeric": true } }
+        "larguraMaxima": {
+          "type": {
+            "numeric": true
+          }
+        },
+        "alturaMinima": {
+          "type": {
+            "numeric": true
+          }
+        },
+        "raio": {
+          "type": {
+            "numeric": true
+          }
+        },
+        "espaco": {
+          "type": {
+            "numeric": true
+          }
+        },
+        "preenchimento": {
+          "type": {
+            "numeric": true
+          }
+        }
       }
     },
     "categoria": {
       "properties": {
-        "cor": { "type": { "fill": { "solid": { "color": true } } } }
+        "cor": {
+          "type": {
+            "fill": {
+              "solid": {
+                "color": true
+              }
+            }
+          }
+        }
       }
     },
     "titulo": {
       "properties": {
-        "fontFamily":  { "type": { "formatting": { "fontFamily": true } } },
-        "fontSize":    { "type": { "formatting": { "fontSize": true } } },
-        "bold":        { "type": { "bool": true } },
-        "italic":      { "type": { "bool": true } },
-        "cor":         { "type": { "fill": { "solid": { "color": true } } } },
-        "maiusculas":  { "type": { "bool": true } },
-        "espacamento": { "type": { "numeric": true } }
+        "fontFamily": {
+          "type": {
+            "formatting": {
+              "fontFamily": true
+            }
+          }
+        },
+        "fontSize": {
+          "type": {
+            "formatting": {
+              "fontSize": true
+            }
+          }
+        },
+        "bold": {
+          "type": {
+            "bool": true
+          }
+        },
+        "italic": {
+          "type": {
+            "bool": true
+          }
+        },
+        "cor": {
+          "type": {
+            "fill": {
+              "solid": {
+                "color": true
+              }
+            }
+          }
+        },
+        "maiusculas": {
+          "type": {
+            "bool": true
+          }
+        },
+        "espacamento": {
+          "type": {
+            "numeric": true
+          }
+        }
       }
     },
     "valor": {
       "properties": {
-        "fontFamily": { "type": { "formatting": { "fontFamily": true } } },
-        "fontSize":   { "type": { "formatting": { "fontSize": true } } },
-        "bold":       { "type": { "bool": true } },
-        "italic":     { "type": { "bool": true } },
-        "cor":        { "type": { "fill": { "solid": { "color": true } } } },
-        "decimais":   { "type": { "numeric": true } },
-        "abreviar":   { "type": { "bool": true } }
+        "fontFamily": {
+          "type": {
+            "formatting": {
+              "fontFamily": true
+            }
+          }
+        },
+        "fontSize": {
+          "type": {
+            "formatting": {
+              "fontSize": true
+            }
+          }
+        },
+        "bold": {
+          "type": {
+            "bool": true
+          }
+        },
+        "italic": {
+          "type": {
+            "bool": true
+          }
+        },
+        "cor": {
+          "type": {
+            "fill": {
+              "solid": {
+                "color": true
+              }
+            }
+          }
+        },
+        "decimais": {
+          "type": {
+            "numeric": true
+          }
+        },
+        "abreviar": {
+          "type": {
+            "bool": true
+          }
+        }
       }
     },
     "rotulo2": {
       "properties": {
-        "fontFamily": { "type": { "formatting": { "fontFamily": true } } },
-        "fontSize":   { "type": { "formatting": { "fontSize": true } } },
-        "bold":       { "type": { "bool": true } },
-        "italic":     { "type": { "bool": true } },
-        "cor":        { "type": { "fill": { "solid": { "color": true } } } }
+        "fontFamily": {
+          "type": {
+            "formatting": {
+              "fontFamily": true
+            }
+          }
+        },
+        "fontSize": {
+          "type": {
+            "formatting": {
+              "fontSize": true
+            }
+          }
+        },
+        "bold": {
+          "type": {
+            "bool": true
+          }
+        },
+        "italic": {
+          "type": {
+            "bool": true
+          }
+        },
+        "cor": {
+          "type": {
+            "fill": {
+              "solid": {
+                "color": true
+              }
+            }
+          }
+        }
       }
     },
     "valor2": {
       "properties": {
-        "fontFamily": { "type": { "formatting": { "fontFamily": true } } },
-        "fontSize":   { "type": { "formatting": { "fontSize": true } } },
-        "bold":       { "type": { "bool": true } },
-        "italic":     { "type": { "bool": true } },
-        "cor":        { "type": { "fill": { "solid": { "color": true } } } }
+        "fontFamily": {
+          "type": {
+            "formatting": {
+              "fontFamily": true
+            }
+          }
+        },
+        "fontSize": {
+          "type": {
+            "formatting": {
+              "fontSize": true
+            }
+          }
+        },
+        "bold": {
+          "type": {
+            "bool": true
+          }
+        },
+        "italic": {
+          "type": {
+            "bool": true
+          }
+        },
+        "cor": {
+          "type": {
+            "fill": {
+              "solid": {
+                "color": true
+              }
+            }
+          }
+        },
+        "decimais": {
+          "type": {
+            "numeric": true
+          }
+        },
+        "abreviar": {
+          "type": {
+            "bool": true
+          }
+        }
       }
     },
     "rodape": {
       "properties": {
-        "mostrar":    { "type": { "bool": true } },
-        "fontFamily": { "type": { "formatting": { "fontFamily": true } } },
-        "fontSize":   { "type": { "formatting": { "fontSize": true } } },
-        "bold":       { "type": { "bool": true } },
-        "italic":     { "type": { "bool": true } },
-        "cor":        { "type": { "fill": { "solid": { "color": true } } } }
+        "mostrar": {
+          "type": {
+            "bool": true
+          }
+        },
+        "fontFamily": {
+          "type": {
+            "formatting": {
+              "fontFamily": true
+            }
+          }
+        },
+        "fontSize": {
+          "type": {
+            "formatting": {
+              "fontSize": true
+            }
+          }
+        },
+        "bold": {
+          "type": {
+            "bool": true
+          }
+        },
+        "italic": {
+          "type": {
+            "bool": true
+          }
+        },
+        "cor": {
+          "type": {
+            "fill": {
+              "solid": {
+                "color": true
+              }
+            }
+          }
+        }
       }
     },
     "selecao": {
       "properties": {
-        "multipla":   { "type": { "bool": true } },
-        "opacidade":  { "type": { "numeric": true } },
-        "corBorda":   { "type": { "fill": { "solid": { "color": true } } } },
-        "espessura":  { "type": { "numeric": true } }
+        "multipla": {
+          "type": {
+            "bool": true
+          }
+        },
+        "opacidade": {
+          "type": {
+            "numeric": true
+          }
+        },
+        "corBorda": {
+          "type": {
+            "fill": {
+              "solid": {
+                "color": true
+              }
+            }
+          }
+        },
+        "espessura": {
+          "type": {
+            "numeric": true
+          }
+        }
       }
     }
   },

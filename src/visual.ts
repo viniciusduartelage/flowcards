@@ -235,19 +235,23 @@ export class Visual implements IVisual {
     }
 
     /**
-     * Numero cru do Valor 2 vira texto. Sem opcao propria de casas
-     * decimais/abreviacao no painel (o grupo "Valor 2" so tem fonte e cor),
-     * entao mantem o comportamento ja aprovado na tela: uma casa decimal e
-     * abreviacao sempre ligada.
+     * Numero cru do Valor 2 vira texto, com as MESMAS opcoes do Valor: casas
+     * decimais e abreviar. Antes a abreviacao era fixa e ligada, o que dava
+     * "R$ 0,4M" onde o usuario precisava ler "R$ 386.843": numero abreviado
+     * serve para comparar magnitude, nao para trabalhar uma lista. Por isso o
+     * padrao aqui nasce SEM abreviar, ao contrario do Valor.
      */
     private fmtValor2(valor: number | null): string {
         if (valor === null) { return ""; }
+        const cfg = this.formattingSettings.valor2;
+        const abreviar = cfg.abreviar.value;
+        const casas = cfg.decimais.value;
         return valueFormatter.create({
             format: this.formatoValor2,
-            value: valor,
-            precision: 1,
+            value: abreviar ? valor : undefined,
+            precision: casas >= 0 ? casas : undefined,
             formatSingleValues: true,
-            allowFormatBeautification: true,
+            allowFormatBeautification: abreviar,
             cultureSelector: this.host.locale
         }).format(valor);
     }

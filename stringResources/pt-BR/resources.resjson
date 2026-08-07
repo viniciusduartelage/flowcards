@@ -32,5 +32,7 @@
   "Prop_Opacidade": "Opacidade dos apagados (%)",
   "Prop_CorBorda": "Cor da borda de destaque",
   "Prop_Espessura": "Espessura da borda (px)",
-  "Prop_Unidade": "Unidades de exibição"
+  "Prop_Unidade": "Unidades de exibição",
+  "Prop_Transparencia": "Transparência (%)",
+  "Prop_BrancoComo": "Mostrar em branco como"
 }

@@ -32,5 +32,7 @@
   "Prop_Opacidade": "Dimmed opacity (%)",
   "Prop_CorBorda": "Highlight border color",
   "Prop_Espessura": "Border thickness (px)",
-  "Prop_Unidade": "Display units"
+  "Prop_Unidade": "Display units",
+  "Prop_Transparencia": "Transparency (%)",
+  "Prop_BrancoComo": "Show blank as"
 }

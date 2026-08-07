@@ -154,9 +154,12 @@ export class Visual implements IVisual {
             el.appendChild(this.span("val", this.fmtValor(c.valor)));
             if (m.temValor2) {
                 if (c.rotulo2) { el.appendChild(this.span("k", c.rotulo2)); }
-                // valor 2 nulo: o rotulo fica, o numero some. Traco ou zero dariam a
-                // impressao de valor nulo em vez de inexistente.
-                if (c.valor2 !== null) { el.appendChild(this.span("v2", this.fmtValor2(c.valor2))); }
+                // Valor 2 nulo: por padrao o rotulo fica e o numero some, porque
+                // traco ou zero dariam a impressao de valor nulo em vez de
+                // inexistente. Quem preferir ver algo escreve o que quer em
+                // "Mostrar em branco como", e ai esse texto aparece no lugar.
+                const txt2 = this.fmtValor2(c.valor2);
+                if (txt2) { el.appendChild(this.span("v2", txt2)); }
             }
             if (s.rodape.mostrar.value && c.rodape) { el.appendChild(this.span("foot", c.rodape)); }
 
@@ -220,8 +223,8 @@ export class Visual implements IVisual {
      * valor real como referencia de magnitude).
      */
     private fmtValor(valor: number | null): string {
-        if (valor === null) { return ""; }
         const cfg = this.formattingSettings.valor;
+        if (valor === null) { return cfg.brancoComo.value || ""; }
         return this.formatar(valor, this.formatoValor,
             String(cfg.unidade.value.value), cfg.decimais.value);
     }
@@ -256,8 +259,8 @@ export class Visual implements IVisual {
      * padrao aqui nasce SEM abreviar, ao contrario do Valor.
      */
     private fmtValor2(valor: number | null): string {
-        if (valor === null) { return ""; }
         const cfg = this.formattingSettings.valor2;
+        if (valor === null) { return cfg.brancoComo.value || ""; }
         return this.formatar(valor, this.formatoValor2,
             String(cfg.unidade.value.value), cfg.decimais.value);
     }
@@ -281,6 +284,25 @@ export class Visual implements IVisual {
     }
 
     /** Converte hex (#RRGGBB ou #RGB) em rgba(...) com a transparencia pedida. */
+
+    /**
+     * Aplica a transparencia escolhida sobre a cor do texto. Aceita as duas
+     * formas que o seletor de cor pode devolver: hex ("#FFFFFF") e rgba, esta
+     * ultima porque os padroes do visual sao brancos com opacidade. Nesse caso a
+     * transparencia do painel MULTIPLICA a opacidade que ja existia, em vez de
+     * substituir, senao mexer no controle jogaria o texto para opaco de repente.
+     */
+    private comTransparencia(cor: string, transparenciaPct: number): string {
+        const fator = Math.max(0, Math.min(100, transparenciaPct || 0)) / 100;
+        const m = /rgba?\(([^)]+)\)/i.exec(cor || "");
+        if (m) {
+            const p = m[1].split(",").map(x => x.trim());
+            const base = p.length > 3 ? parseFloat(p[3]) : 1;
+            return `rgba(${p[0]}, ${p[1]}, ${p[2]}, ${(base * (1 - fator)).toFixed(3)})`;
+        }
+        return this.rgba(cor, Number((1 - fator).toFixed(3)));
+    }
+
     private rgba(hex: string, alpha: number): string {
         const h = (hex || "#000000").replace("#", "");
         const full = h.length === 3 ? h.split("").map(ch => ch + ch).join("") : h;
@@ -310,31 +332,31 @@ export class Visual implements IVisual {
         st.setProperty("--fc-lbl-size", `${s.titulo.font.fontSize.value}px`);
         st.setProperty("--fc-lbl-weight", s.titulo.font.bold.value ? "700" : "400");
         st.setProperty("--fc-lbl-style", s.titulo.font.italic.value ? "italic" : "normal");
-        st.setProperty("--fc-lbl-color", s.titulo.cor.value.value);
+        st.setProperty("--fc-lbl-color", this.comTransparencia(s.titulo.cor.value.value, s.titulo.transparencia.value));
         st.setProperty("--fc-lbl-spacing", `${s.titulo.espacamento.value}px`);
 
         st.setProperty("--fc-val-family", s.valor.font.fontFamily.value);
         st.setProperty("--fc-val-size", `${s.valor.font.fontSize.value}px`);
         st.setProperty("--fc-val-weight", s.valor.font.bold.value ? "700" : "400");
         st.setProperty("--fc-val-style", s.valor.font.italic.value ? "italic" : "normal");
-        st.setProperty("--fc-val-color", s.valor.cor.value.value);
+        st.setProperty("--fc-val-color", this.comTransparencia(s.valor.cor.value.value, s.valor.transparencia.value));
 
         st.setProperty("--fc-k-family", s.rotulo2.font.fontFamily.value);
         st.setProperty("--fc-k-size", `${s.rotulo2.font.fontSize.value}px`);
         st.setProperty("--fc-k-weight", s.rotulo2.font.bold.value ? "700" : "400");
         st.setProperty("--fc-k-style", s.rotulo2.font.italic.value ? "italic" : "normal");
-        st.setProperty("--fc-k-color", s.rotulo2.cor.value.value);
+        st.setProperty("--fc-k-color", this.comTransparencia(s.rotulo2.cor.value.value, s.rotulo2.transparencia.value));
 
         st.setProperty("--fc-v2-family", s.valor2.font.fontFamily.value);
         st.setProperty("--fc-v2-size", `${s.valor2.font.fontSize.value}px`);
         st.setProperty("--fc-v2-weight", s.valor2.font.bold.value ? "700" : "400");
         st.setProperty("--fc-v2-style", s.valor2.font.italic.value ? "italic" : "normal");
-        st.setProperty("--fc-v2-color", s.valor2.cor.value.value);
+        st.setProperty("--fc-v2-color", this.comTransparencia(s.valor2.cor.value.value, s.valor2.transparencia.value));
 
         st.setProperty("--fc-foot-family", s.rodape.font.fontFamily.value);
         st.setProperty("--fc-foot-size", `${s.rodape.font.fontSize.value}px`);
         st.setProperty("--fc-foot-weight", s.rodape.font.bold.value ? "700" : "400");
         st.setProperty("--fc-foot-style", s.rodape.font.italic.value ? "italic" : "normal");
-        st.setProperty("--fc-foot-color", s.rodape.cor.value.value);
+        st.setProperty("--fc-foot-color", this.comTransparencia(s.rodape.cor.value.value, s.rodape.transparencia.value));
     }
 }

@@ -79,12 +79,13 @@ class CategoriaColorCard extends SimpleCard {
 class TituloCard extends SimpleCard {
     font = makeFont(9.5, true);
     cor = new formattingSettings.ColorPicker({ name: "cor", displayName: "Color", displayNameKey: "Common_Color", value: { value: "rgba(255,255,255,0.64)" } });
+    transparencia = new formattingSettings.NumUpDown({ name: "transparencia", displayName: "Transparency (%)", displayNameKey: "Prop_Transparencia", value: 0 });
     maiusculas = new formattingSettings.ToggleSwitch({ name: "maiusculas", displayName: "UPPERCASE", displayNameKey: "Prop_Maiusculas", value: true });
     espacamento = new formattingSettings.NumUpDown({ name: "espacamento", displayName: "Letter spacing (px)", displayNameKey: "Prop_Espacamento", value: 0.8 });
     name: string = "titulo";
     displayName: string = "Title";
     displayNameKey: string = "Obj_Titulo";
-    slices: FormattingSettingsSlice[] = [this.font, this.cor, this.maiusculas, this.espacamento];
+    slices: FormattingSettingsSlice[] = [this.font, this.cor, this.transparencia, this.maiusculas, this.espacamento];
 }
 
 // ---------------------------------------------------------------------------
@@ -116,39 +117,44 @@ function criarUnidade(padrao: string): formattingSettings.ItemDropdown {
 class ValorCard extends SimpleCard {
     font = makeFont(26, true);
     cor = new formattingSettings.ColorPicker({ name: "cor", displayName: "Color", displayNameKey: "Common_Color", value: { value: "#FFFFFF" } });
+    transparencia = new formattingSettings.NumUpDown({ name: "transparencia", displayName: "Transparency (%)", displayNameKey: "Prop_Transparencia", value: 0 });
     // Padrao automatico: o numero grande do cartao e para ler de relance.
     unidade = criarUnidade("0");
     decimais = new formattingSettings.NumUpDown({ name: "decimais", displayName: "Decimal places (-1 = auto)", displayNameKey: "Prop_Decimais", value: 1 });
+    brancoComo = new formattingSettings.TextInput({ name: "brancoComo", displayName: "Show blank as", displayNameKey: "Prop_BrancoComo", value: "", placeholder: "" });
     name: string = "valor";
     displayName: string = "Value";
     displayNameKey: string = "Obj_Valor";
-    slices: FormattingSettingsSlice[] = [this.font, this.cor, this.unidade, this.decimais];
+    slices: FormattingSettingsSlice[] = [this.font, this.cor, this.transparencia, this.unidade, this.decimais, this.brancoComo];
 }
 
 // ---------------------------------------------------------------------------
 class Rotulo2Card extends SimpleCard {
     font = makeFont(8.5, true);
     cor = new formattingSettings.ColorPicker({ name: "cor", displayName: "Color", displayNameKey: "Common_Color", value: { value: "rgba(255,255,255,0.52)" } });
+    transparencia = new formattingSettings.NumUpDown({ name: "transparencia", displayName: "Transparency (%)", displayNameKey: "Prop_Transparencia", value: 0 });
     name: string = "rotulo2";
     displayName: string = "Second value label";
     displayNameKey: string = "Obj_Rotulo2";
-    slices: FormattingSettingsSlice[] = [this.font, this.cor];
+    slices: FormattingSettingsSlice[] = [this.font, this.cor, this.transparencia];
 }
 
 // ---------------------------------------------------------------------------
 class Valor2Card extends SimpleCard {
     font = makeFont(13.5, true);
     cor = new formattingSettings.ColorPicker({ name: "cor", displayName: "Color", displayNameKey: "Common_Color", value: { value: "rgba(255,255,255,0.88)" } });
+    transparencia = new formattingSettings.NumUpDown({ name: "transparencia", displayName: "Transparency (%)", displayNameKey: "Prop_Transparencia", value: 0 });
     // A unidade e ESCOLHIDA, nao adivinhada. "Automatico" deixa o Power BI
     // decidir a escala, e foi o que produzia "R$ 0,4M" onde a pessoa precisava
     // ler "R$ 386.843". O padrao aqui e Nenhum, porque o valor secundario e o
     // numero que se vai perseguir numa lista, nao comparar de relance.
     unidade = criarUnidade("1");
     decimais = new formattingSettings.NumUpDown({ name: "decimais", displayName: "Decimal places (-1 = auto)", displayNameKey: "Prop_Decimais", value: 0 });
+    brancoComo = new formattingSettings.TextInput({ name: "brancoComo", displayName: "Show blank as", displayNameKey: "Prop_BrancoComo", value: "", placeholder: "" });
     name: string = "valor2";
     displayName: string = "Second value";
     displayNameKey: string = "Obj_Valor2";
-    slices: FormattingSettingsSlice[] = [this.font, this.cor, this.unidade, this.decimais];
+    slices: FormattingSettingsSlice[] = [this.font, this.cor, this.transparencia, this.unidade, this.decimais, this.brancoComo];
 }
 
 // ---------------------------------------------------------------------------
@@ -156,11 +162,12 @@ class RodapeCard extends SimpleCard {
     mostrar = new formattingSettings.ToggleSwitch({ name: "mostrar", displayName: "Show", displayNameKey: "Common_Show", value: true });
     font = makeFont(10, false);
     cor = new formattingSettings.ColorPicker({ name: "cor", displayName: "Color", displayNameKey: "Common_Color", value: { value: "rgba(255,255,255,0.42)" } });
+    transparencia = new formattingSettings.NumUpDown({ name: "transparencia", displayName: "Transparency (%)", displayNameKey: "Prop_Transparencia", value: 0 });
     name: string = "rodape";
     displayName: string = "Footnote";
     displayNameKey: string = "Obj_Rodape";
     topLevelSlice: formattingSettings.ToggleSwitch = this.mostrar;
-    slices: FormattingSettingsSlice[] = [this.font, this.cor];
+    slices: FormattingSettingsSlice[] = [this.font, this.cor, this.transparencia];
 }
 
 // ---------------------------------------------------------------------------

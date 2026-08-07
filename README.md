@@ -6,7 +6,8 @@ A custom **Power BI** visual that draws **one card per value of a category**, si
 side, and **filters the page when a card is clicked**.
 
 ![FlowCards](docs/screenshot.png)
-<!-- docs/screenshot.png is a placeholder, drop a real screenshot here. -->
+
+*The six lifecycle stages of a real customer base, left to right. Clicking a card filters the rest of the page.*
 
 ## What it is / when to use
 

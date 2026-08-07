@@ -6,7 +6,8 @@ Visual personalizado para **Power BI** que desenha **um cartão por valor de uma
 categoria**, lado a lado, e **filtra a página quando um cartão é clicado**.
 
 ![FlowCards](docs/screenshot.png)
-<!-- docs/screenshot.png é um placeholder, adicione um print do visual quando tiver. -->
+
+*As seis etapas do ciclo de vida de uma base real, da esquerda para a direita. Clicar num cartão filtra o resto da página.*
 
 ## O que é / quando usar
 

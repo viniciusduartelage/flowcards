@@ -25,16 +25,16 @@ per category value, in the order it receives them, and reports the click.
 
 | Field | Required | Role |
 |---|---|---|
-| **Categoria** (Category) | yes | one card per distinct value |
-| **Valor** (Value) | yes | the card's big number |
-| **Valor 2** (Second value) | no | a smaller, secondary metric |
-| **Rótulo do valor 2** (Second value label) | no | text above the second value |
-| **Rodapé** (Footnote) | no | small caption at the bottom of the card |
-| **Cor** (Color) | no | overrides the category's configured color |
+| **Category** | yes | one card per distinct value |
+| **Value** | yes | the card's big number |
+| **Second value** | no | a smaller, secondary metric |
+| **Second value label** | no | text above the second value |
+| **Footnote** | no | small caption at the bottom of the card |
+| **Color** | no | overrides the category's configured color |
 
-**Rótulo do valor 2 and Rodapé are measures, not fixed text.** That is deliberate:
+**Second value label and Footnote are measures, not fixed text.** That is deliberate:
 it lets the text change per card without the visual knowing why. For example
-"Potencial" on a healthy-customer card and "Recoverable this month" on an
+"Potential" on a healthy-customer card and "Recoverable this month" on an
 at-risk one, "up to 75 days" on one card and "over 1 year" on another, each
 written by a DAX measure that evaluates per category.
 
@@ -48,7 +48,7 @@ wrong order, the fix is the field's Sort by column, not a setting on this visual
 
 ## Card with no second value
 
-When **Valor 2** is blank for a card, **the number disappears and the label
+When **Second value** is blank for a card, **the number disappears and the label
 stays**. There is no dash and no zero, because either would look like a null
 value instead of a value that does not exist for that category. This is
 configurable per field in **Show blank as** (Value and Second value cards), for

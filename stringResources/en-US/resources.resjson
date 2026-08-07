@@ -5,7 +5,6 @@
   "Role_Rotulo2": "Second value label",
   "Role_Rodape": "Footnote",
   "Role_Cor": "Color",
-
   "Obj_Cartoes": "Cards",
   "Obj_Categoria": "Category colors",
   "Obj_Titulo": "Title",
@@ -14,29 +13,24 @@
   "Obj_Valor2": "Second value",
   "Obj_Rodape": "Footnote",
   "Obj_Selecao": "Selection",
-
   "Common_Color": "Color",
   "Common_Show": "Show",
-
   "Font_Family": "Font",
   "Font_Size": "Size",
   "Font_Bold": "Bold",
   "Font_Italic": "Italic",
-
   "Prop_LarguraMaxima": "Max width (px, 0 = no limit)",
   "Prop_AlturaMinima": "Min height (px)",
   "Prop_Raio": "Corner radius (px)",
   "Prop_Espaco": "Gap (px)",
   "Prop_Preenchimento": "Inner padding (px)",
-
   "Prop_Maiusculas": "UPPERCASE",
   "Prop_Espacamento": "Letter spacing (px)",
-
   "Prop_Decimais": "Decimal places (-1 = auto)",
   "Prop_Abreviar": "Abbreviate large numbers",
-
   "Prop_Multipla": "Allow multiple",
   "Prop_Opacidade": "Dimmed opacity (%)",
   "Prop_CorBorda": "Highlight border color",
-  "Prop_Espessura": "Border thickness (px)"
+  "Prop_Espessura": "Border thickness (px)",
+  "Prop_Unidade": "Display units"
 }

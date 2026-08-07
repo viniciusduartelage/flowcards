@@ -88,15 +88,41 @@ class TituloCard extends SimpleCard {
 }
 
 // ---------------------------------------------------------------------------
+/**
+ * Unidade de exibicao, no mesmo vocabulario dos visuais nativos do Power BI.
+ * O valor guardado e o divisor que o valueFormatter entende: "0" pede escala
+ * automatica, "1" nao escala, e os demais fixam a unidade. Escolher e melhor
+ * que adivinhar: "automatico" e o que transformava R$ 386.843 em R$ 0,4M.
+ */
+function criarUnidade(padrao: string): formattingSettings.ItemDropdown {
+    const itens = [
+        { value: "0",             displayName: "Automatic" },
+        { value: "1",             displayName: "None" },
+        { value: "1000",          displayName: "Thousands (K)" },
+        { value: "1000000",       displayName: "Millions (M)" },
+        { value: "1000000000",    displayName: "Billions (B)" },
+        { value: "1000000000000", displayName: "Trillions (T)" }
+    ];
+    return new formattingSettings.ItemDropdown({
+        name: "unidade",
+        displayName: "Display units",
+        displayNameKey: "Prop_Unidade",
+        items: itens,
+        value: itens.filter(i => i.value === padrao)[0]
+    });
+}
+
+// ---------------------------------------------------------------------------
 class ValorCard extends SimpleCard {
     font = makeFont(26, true);
     cor = new formattingSettings.ColorPicker({ name: "cor", displayName: "Color", displayNameKey: "Common_Color", value: { value: "#FFFFFF" } });
+    // Padrao automatico: o numero grande do cartao e para ler de relance.
+    unidade = criarUnidade("0");
     decimais = new formattingSettings.NumUpDown({ name: "decimais", displayName: "Decimal places (-1 = auto)", displayNameKey: "Prop_Decimais", value: 1 });
-    abreviar = new formattingSettings.ToggleSwitch({ name: "abreviar", displayName: "Abbreviate large numbers", displayNameKey: "Prop_Abreviar", value: true });
     name: string = "valor";
     displayName: string = "Value";
     displayNameKey: string = "Obj_Valor";
-    slices: FormattingSettingsSlice[] = [this.font, this.cor, this.decimais, this.abreviar];
+    slices: FormattingSettingsSlice[] = [this.font, this.cor, this.unidade, this.decimais];
 }
 
 // ---------------------------------------------------------------------------
@@ -113,15 +139,16 @@ class Rotulo2Card extends SimpleCard {
 class Valor2Card extends SimpleCard {
     font = makeFont(13.5, true);
     cor = new formattingSettings.ColorPicker({ name: "cor", displayName: "Color", displayNameKey: "Common_Color", value: { value: "rgba(255,255,255,0.88)" } });
-    // Mesmas opcoes do Valor, porem o padrao aqui NAO abrevia: numero abreviado
-    // serve para comparar magnitude, e o valor secundario costuma ser o que a
-    // pessoa vai perseguir numa lista, onde "R$ 386.843" vale mais que "R$ 0,4M".
+    // A unidade e ESCOLHIDA, nao adivinhada. "Automatico" deixa o Power BI
+    // decidir a escala, e foi o que produzia "R$ 0,4M" onde a pessoa precisava
+    // ler "R$ 386.843". O padrao aqui e Nenhum, porque o valor secundario e o
+    // numero que se vai perseguir numa lista, nao comparar de relance.
+    unidade = criarUnidade("1");
     decimais = new formattingSettings.NumUpDown({ name: "decimais", displayName: "Decimal places (-1 = auto)", displayNameKey: "Prop_Decimais", value: 0 });
-    abreviar = new formattingSettings.ToggleSwitch({ name: "abreviar", displayName: "Abbreviate large numbers", displayNameKey: "Prop_Abreviar", value: false });
     name: string = "valor2";
     displayName: string = "Second value";
     displayNameKey: string = "Obj_Valor2";
-    slices: FormattingSettingsSlice[] = [this.font, this.cor, this.decimais, this.abreviar];
+    slices: FormattingSettingsSlice[] = [this.font, this.cor, this.unidade, this.decimais];
 }
 
 // ---------------------------------------------------------------------------

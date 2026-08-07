@@ -222,14 +222,28 @@ export class Visual implements IVisual {
     private fmtValor(valor: number | null): string {
         if (valor === null) { return ""; }
         const cfg = this.formattingSettings.valor;
-        const abreviar = cfg.abreviar.value;
-        const casas = cfg.decimais.value;
+        return this.formatar(valor, this.formatoValor,
+            String(cfg.unidade.value.value), cfg.decimais.value);
+    }
+
+    /**
+     * Formata um numero com a unidade ESCOLHIDA pelo usuario.
+     *
+     * O valueFormatter usa o parametro `value` como referencia de escala:
+     * passar 0 pede escala automatica, e passar o divisor (1000, 1000000)
+     * fixa a unidade. Para "nenhuma unidade" nao se passa `value` e se desliga
+     * o embelezamento, senao ele volta a abreviar por conta propria, que era
+     * exatamente o que produzia "R$ 0,4M" onde se queria "R$ 386.843".
+     */
+    private formatar(valor: number, formato: string, unidade: string, casas: number): string {
+        const divisor = Number(unidade);
+        const escalar = divisor !== 1;
         return valueFormatter.create({
-            format: this.formatoValor,
-            value: abreviar ? valor : undefined,
+            format: formato,
+            value: escalar ? (divisor === 0 ? valor : divisor) : undefined,
             precision: casas >= 0 ? casas : undefined,
             formatSingleValues: true,
-            allowFormatBeautification: abreviar,
+            allowFormatBeautification: escalar,
             cultureSelector: this.host.locale
         }).format(valor);
     }
@@ -244,16 +258,8 @@ export class Visual implements IVisual {
     private fmtValor2(valor: number | null): string {
         if (valor === null) { return ""; }
         const cfg = this.formattingSettings.valor2;
-        const abreviar = cfg.abreviar.value;
-        const casas = cfg.decimais.value;
-        return valueFormatter.create({
-            format: this.formatoValor2,
-            value: abreviar ? valor : undefined,
-            precision: casas >= 0 ? casas : undefined,
-            formatSingleValues: true,
-            allowFormatBeautification: abreviar,
-            cultureSelector: this.host.locale
-        }).format(valor);
+        return this.formatar(valor, this.formatoValor2,
+            String(cfg.unidade.value.value), cfg.decimais.value);
     }
 
     /** Cor padrao por posicao do cartao, usada so quando a coluna Cor nao veio preenchida. */

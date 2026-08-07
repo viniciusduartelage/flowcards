@@ -234,9 +234,34 @@
             "numeric": true
           }
         },
-        "abreviar": {
+        "unidade": {
           "type": {
-            "bool": true
+            "enumeration": [
+              {
+                "value": "0",
+                "displayName": "Automatic"
+              },
+              {
+                "value": "1",
+                "displayName": "None"
+              },
+              {
+                "value": "1000",
+                "displayName": "Thousands (K)"
+              },
+              {
+                "value": "1000000",
+                "displayName": "Millions (M)"
+              },
+              {
+                "value": "1000000000",
+                "displayName": "Billions (B)"
+              },
+              {
+                "value": "1000000000000",
+                "displayName": "Trillions (T)"
+              }
+            ]
           }
         }
       }
@@ -318,9 +343,34 @@
             "numeric": true
           }
         },
-        "abreviar": {
+        "unidade": {
           "type": {
-            "bool": true
+            "enumeration": [
+              {
+                "value": "0",
+                "displayName": "Automatic"
+              },
+              {
+                "value": "1",
+                "displayName": "None"
+              },
+              {
+                "value": "1000",
+                "displayName": "Thousands (K)"
+              },
+              {
+                "value": "1000000",
+                "displayName": "Millions (M)"
+              },
+              {
+                "value": "1000000000",
+                "displayName": "Billions (B)"
+              },
+              {
+                "value": "1000000000000",
+                "displayName": "Trillions (T)"
+              }
+            ]
           }
         }
       }
